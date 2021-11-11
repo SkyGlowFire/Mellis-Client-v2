@@ -8,7 +8,6 @@ import { useAppSelector } from '~/app/hooks';
 import Footer from '../Footer';
 import LookModal from '~/common/components/modals/LookModal';
 import ImageModal from '~/common/components/modals/ImageModal';
-import ErrorHandler from '~/errors/ErrorHandler';
 import AddressModal from '~/common/components/modals/AddressModal';
 import CartItemModal from '~/common/components/modals/CartItemModal';
 import Alerts from '~/alerts/Alerts';
@@ -40,7 +39,7 @@ const MainLayout: FC = ({ children }) => {
       <SearchProducts />
       <main className={classes.main}>
         {isLoading && <Spinner />}
-        <ErrorHandler>{children}</ErrorHandler>
+        {children}
       </main>
       <Footer />
     </>

@@ -8,7 +8,8 @@ import { MyTheme } from './styles';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-import { FiltersProvider } from '~/products/context/FiltersContext';
+import { FiltersProvider } from '~/products/FiltersProvider';
+import ErrorHandler from '~/errors/ErrorHandler';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,7 +18,9 @@ ReactDOM.render(
         <ThemeProvider theme={MyTheme}>
           <StyledEngineProvider injectFirst>
             <FiltersProvider>
-              <App />
+              <ErrorHandler>
+                <App />
+              </ErrorHandler>
             </FiltersProvider>
           </StyledEngineProvider>
         </ThemeProvider>

@@ -6,9 +6,10 @@ export interface ICategory{
     title: string
     text: string
     level: number
-    parents: ICategory[]
+    parents: string[]
     children: ICategory[]
     path: string[]
-    products: IProduct[]
+    products: string[]
     totalProducts: number
+    bestseller: IProduct
 }

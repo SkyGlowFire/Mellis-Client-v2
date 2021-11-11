@@ -5,7 +5,7 @@ import FiltersMenu from '../FiltersMenu';
 import { useLazyGetProductsQuery } from '~/app/api';
 import { useLocation, useParams } from 'react-router';
 import MainContent from './MainContent';
-import { useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
 import { useEffect } from 'react';
 import { useAppSelector } from '~/app/hooks';
 
@@ -33,7 +33,9 @@ const Products = () => {
   const { category, group, subGroup } = useParams<ProductsUrlParams>();
   const location = useLocation();
   const { searchQuery } = useAppSelector((state) => state.main);
-  const { setmaxPrice, setminPrice } = useFilters();
+  const {
+    filtersSetters: { setmaxPrice, setminPrice },
+  } = useFilters();
 
   const [getProducts, { data }] = useLazyGetProductsQuery();
 
@@ -49,9 +51,9 @@ const Products = () => {
   }, [category, group, subGroup, searchQuery, location.search, getProducts]);
 
   useEffect(() => {
-    if (searchQuery === '') {
-      if (data?.minPrice) setminPrice(data.minPrice);
-      if (data?.maxPrice) setmaxPrice(data.maxPrice);
+    if (searchQuery === '' && data) {
+      setminPrice(data.minPrice || 0);
+      setmaxPrice(data.maxPrice || 100);
     }
   }, [data, setmaxPrice, setminPrice, searchQuery]);
 

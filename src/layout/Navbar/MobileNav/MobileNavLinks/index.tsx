@@ -16,7 +16,7 @@ const useStyles = makeStyles<Theme, { open: boolean }>((theme) => ({
     height: '100vh',
     transition: 'max-height .5s ease',
     overflowX: 'hidden',
-    overflowY: open ? 'scroll' : 'hidden',
+    overflowY: 'hidden',
     zIndex: 100,
     backgroundColor: theme.palette.primary.contrastText,
   }),
@@ -26,7 +26,7 @@ const useStyles = makeStyles<Theme, { open: boolean }>((theme) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    overflowY: 'scroll',
+    overflowY: 'hidden',
     backgroundColor: theme.palette.primary.contrastText,
   },
 }));

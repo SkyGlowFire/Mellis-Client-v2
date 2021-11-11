@@ -57,16 +57,19 @@ const SectionNav = () => {
 
   useEffect(() => {
     if (!activeCategory) return;
-    let sectionColor: SectionColor = 'primary';
+    let sectionColor: SectionColor = 'success';
     switch (activeCategory.title) {
       case 'men':
         sectionColor = 'info';
         break;
-      case 'womens':
-        sectionColor = 'success';
+      case 'women':
+        sectionColor = 'secondary';
         break;
       case 'girls':
-        sectionColor = 'secondary';
+        sectionColor = 'success';
+        break;
+      case 'boys':
+        sectionColor = 'primary';
         break;
       default:
         break;

@@ -1,9 +1,10 @@
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 import { FC } from 'react';
-import { ColorFilter, useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
+import { Color } from '~/types/products';
 
-const useStyles = makeStyles<Theme, { active: boolean; color: ColorFilter }>(
+const useStyles = makeStyles<Theme, { active: boolean; color: Color }>(
   (theme) => ({
     root: {
       display: 'flex',
@@ -33,13 +34,16 @@ const useStyles = makeStyles<Theme, { active: boolean; color: ColorFilter }>(
 );
 
 interface ColorItemProps {
-  value: ColorFilter;
+  value: Color;
 }
 
 const ColorItem: FC<ColorItemProps> = ({ value }) => {
-  const { colors, setColors } = useFilters();
+  const {
+    filtersState: { colors },
+    filtersSetters: { setColors },
+  } = useFilters();
 
-  const toggleColor = (val: ColorFilter) => {
+  const toggleColor = (val: Color) => {
     setColors((prev) => {
       if (prev.includes(val)) {
         return prev.filter((color) => color !== val);

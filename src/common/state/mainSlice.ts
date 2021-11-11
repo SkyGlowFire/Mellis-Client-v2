@@ -129,7 +129,7 @@ export const mainSlice = createSlice({
             const endpoint = meta?.arg?.endpointName
             state.loading = {isLoading: false, endpoint};
             if(payload?.status === 'FETCH_ERROR'){
-                state.error = {message: 'Server does not respond', endpoint}
+                state.error = {message: 'Server does not respond', endpoint, status: payload.status}
                 return
             }
             if(payload?.data){

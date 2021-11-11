@@ -108,6 +108,13 @@ export const cartSlice = createSlice({
         },
         clearCart(state){
             state.items = []
+        },
+        setCartItems(state, {payload}: PayloadAction<CartItem[]>){
+            state.items = payload
+            const totalPrice = payload.reduce((acc, item) => {
+                return acc + item.qty*item.price
+            }, 0)
+            state.totalPrice = totalPrice
         }
     },
 })
@@ -120,7 +127,8 @@ export const {
     changeCartItemSize, 
     selectPaymentMethod,
     selectAddress,
-    clearCart
+    clearCart,
+    setCartItems
 } = cartSlice.actions
 
 export default cartSlice.reducer;

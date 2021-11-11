@@ -18,7 +18,7 @@ import CartItemCard from './CartItemCard';
 const useStyles = makeStyles<Theme>((theme) => ({
   root: { minHeight: 600 },
   side: {
-    backgroundColor: theme.palette.grey['100'],
+    backgroundColor: theme.palette.success.light,
     height: '100%',
     padding: '0 1rem',
   },

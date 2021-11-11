@@ -20,6 +20,7 @@ import { setAlert } from '~/alerts/alertSlice';
 import { useEffect } from 'react';
 import { navHeight, navHeight2, searchbarHeight } from '~/styles/constants';
 import { makeStyles } from '@mui/styles';
+import SocialButtons from '../SocialButtons';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -95,12 +96,14 @@ const Register = () => {
             />
             <Typography variant="body2" style={{ marginBottom: '1rem' }}>
               Already have an account?
-              <Link
+              <MuiLink
+                component={Link}
+                underline="hover"
                 to={fromUrl ? `/auth/login?from=${fromUrl}` : '/auth/login'}
                 style={{ marginLeft: '.5rem' }}
               >
-                <MuiLink>Log In.</MuiLink>
-              </Link>
+                Log In.
+              </MuiLink>
             </Typography>
             <Button
               onClick={handleSubmit(onSubmit)}
@@ -120,7 +123,7 @@ const Register = () => {
           >
             Or Log in using:
           </Typography>
-          {/* <SocialButtons from={fromURL} /> */}
+          <SocialButtons />
         </Container>
       </FormProvider>
     </>

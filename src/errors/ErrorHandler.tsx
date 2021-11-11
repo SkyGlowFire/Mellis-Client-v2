@@ -21,13 +21,14 @@ const ErrorHandler: FC = ({ children }) => {
     }
   }, [error, dispatch]);
 
-  return error?.status === 404 ? (
-    <Page404 />
-  ) : error?.status === 'FETCH_ERROR' ? (
-    <ErrorPage />
-  ) : (
-    <>{children}</>
-  );
+  // return error?.status === 404 ? (
+  //   <Page404 />
+  // ) : error?.status === 'FETCH_ERROR' ? (
+  //   <ErrorPage />
+  // ) : (
+  //   <>{children}</>
+  // );
+  return error?.status === 'FETCH_ERROR' ? <ErrorPage /> : <>{children}</>;
 };
 
 export default ErrorHandler;

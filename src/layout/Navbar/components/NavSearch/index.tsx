@@ -8,7 +8,7 @@ import { setSearchText, setSearchQuery } from '~/common/state/mainSlice';
 const useStyles = makeStyles<Theme, { active: boolean }>((theme) => ({
   root: {
     position: 'absolute',
-    width: '100vw',
+    width: '100%',
     height: searchbarHeight,
     display: 'flex',
     top: navHeight,

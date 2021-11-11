@@ -21,13 +21,15 @@ import { FC, useEffect } from 'react';
 import { navHeight, navHeight2, searchbarHeight } from '~/styles/constants';
 import { useAppSelector, useAppDispatch } from '~/app/hooks';
 import { setAlert } from '~/alerts/alertSlice';
+import SocialButtons from '../SocialButtons';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
-    marginTop: navHeight + searchbarHeight + 32,
-    marginBottom: 64,
+    marginTop: navHeight + searchbarHeight,
+    paddingTop: 32,
+    paddingBottom: 64,
     [theme.breakpoints.up('md')]: {
-      marginTop: navHeight2 + 32,
+      marginTop: navHeight2,
     },
   },
 }));
@@ -78,21 +80,25 @@ const Login: FC = () => {
               fullWidth
               style={{ marginBottom: '1rem' }}
             />
-            <Typography
-              variant="body2"
-              gutterBottom
-              style={{ marginBottom: '1rem' }}
-            >
-              Forgot password?
+            <Typography variant="body2" style={{ marginBottom: '1rem' }}>
+              <MuiLink
+                underline="hover"
+                component={Link}
+                to={'/auth/forgot-password'}
+              >
+                Forgot password?
+              </MuiLink>
             </Typography>
             <Typography variant="body2" style={{ marginBottom: '1rem' }}>
               Don't have an account?
-              <Link
+              <MuiLink
+                underline="hover"
+                component={Link}
                 to={fromUrl ? `/auth/signup?from=${fromUrl}` : '/auth/signup'}
                 style={{ marginLeft: '.5rem' }}
               >
-                <MuiLink>Sign Up.</MuiLink>
-              </Link>
+                Sign Up.
+              </MuiLink>
             </Typography>
             <Button
               onClick={handleSubmit(onSubmit)}
@@ -112,6 +118,7 @@ const Login: FC = () => {
           >
             Or Log in using:
           </Typography>
+          <SocialButtons />
         </Container>
       </FormProvider>
     </>

@@ -1,5 +1,6 @@
 import FilterHeader from '../FilterHeader';
-import { allFilterValues, useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
+import { colorValues } from '~/products/FiltersContext';
 import Filter from '../Filter';
 import ColorItem from './ColorItem';
 import { makeStyles } from '@mui/styles';
@@ -15,10 +16,13 @@ const useStyles = makeStyles({
 });
 
 const ColorFilter = () => {
-  const { colors, setColors } = useFilters();
+  const {
+    filtersSetters: { setColors },
+    filtersState: { colors },
+  } = useFilters();
 
   const selectAllHandler = () => {
-    setColors(allFilterValues.colors);
+    setColors(colorValues);
   };
 
   const clearHandler = () => {
@@ -35,7 +39,7 @@ const ColorFilter = () => {
         selectedCount={colors.length}
       />
       <ul className={classes.container}>
-        {allFilterValues.colors.map((value) => (
+        {colorValues.map((value) => (
           <ColorItem value={value} key={`color-${value}`} />
         ))}
       </ul>

@@ -3,6 +3,7 @@ import { Media } from './files'
 import { ILook } from './looks'
 
 export type Size = 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl'
+export type Color = "black" | "blue" | "brown" | "green" | "grey" | "orange" | "red" | "white" | "yellow"
 
 export interface IProduct{
     _id: string
@@ -13,7 +14,7 @@ export interface IProduct{
     image: Media
     media: Media[]
     sizes: Size[]
-    color: string
+    color: Color
     brand: string
     weight: number
     path: string[]

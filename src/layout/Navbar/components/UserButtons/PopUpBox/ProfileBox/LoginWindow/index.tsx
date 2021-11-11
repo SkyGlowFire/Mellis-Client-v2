@@ -16,7 +16,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
     padding: '1rem',
   },
   colored: {
-    backgroundColor: theme.palette.info.light,
+    backgroundColor: theme.palette.success.light,
   },
   btn: {
     display: 'inline-block',

@@ -13,9 +13,8 @@ const useStyles = makeStyles<Theme>((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     position: 'fixed',
-
     top: 0,
-    width: '100vw',
+    width: '100%',
     zIndex: 1000,
     [theme.breakpoints.up('md')]: {
       marginBottom: 0,
@@ -24,7 +23,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
   },
   navContent: {
     position: 'relative',
-    maxWidth: '100%',
+    width: '100%',
   },
   mainMenu: {
     height: navHeight,

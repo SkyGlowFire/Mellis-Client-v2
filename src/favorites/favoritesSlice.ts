@@ -30,10 +30,13 @@ export const favoritesSlice = createSlice({
         },
         removeFavItem(state, {payload}: PayloadAction<string>){
             state.items = state.items.filter(x => x.id !== payload)
+        },
+        setFavItems(state, {payload}: PayloadAction<FavItem[]>){
+            state.items = payload
         }
     },
 })
 
-export const {addFavItem, removeFavItem} = favoritesSlice.actions
+export const {addFavItem, removeFavItem, setFavItems} = favoritesSlice.actions
 
 export default favoritesSlice.reducer;

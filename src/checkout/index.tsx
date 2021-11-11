@@ -14,7 +14,7 @@ import { clearCart } from '~/cart/cartSlice';
 const useStyles = makeStyles<Theme>((theme) => ({
   side: {
     height: '100%',
-    backgroundColor: theme.palette.grey['100'],
+    backgroundColor: theme.palette.success.light,
   },
   main: {
     borderRight: `1px solid ${theme.palette.grey['100']}`,
@@ -31,7 +31,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
   },
   count: {
     padding: '.2rem .5rem',
-    backgroundColor: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.info.light,
     display: 'inline-block',
   },
 }));

@@ -32,10 +32,31 @@ export interface ISearchResponse{
     maxPrice?: number
 }
 
+export interface ErrorResponse{
+  status: number
+  message: string
+}
+
 export const Api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: API_URI, credentials: 'include' }),
   tagTypes: ['Categories', 'Products', 'Looks', 'Orders', 'User', 'Addresses'],
   endpoints: (builder) => ({
+    //auth
+    forgotPassword: builder.mutation<void, {email: string}>({
+      query: (data) => ({
+        url: '/auth/resetPasword',
+        method: 'POST',
+        body: data
+      })
+    }),
+
+    resetPassword: builder.mutation<void, {password: string, token: string}>({
+      query: ({password, token}) => ({
+        url: `/auth/resetPasword/${token}`,
+        method: 'PUT',
+        body: {password}
+      })
+    }),
 
     //profile
     updateUser: builder.mutation<IUser, {id: string, data: UpdateUserDto}>({
@@ -159,5 +180,7 @@ export const {
     useGetAddressesQuery,
     useSearchProductsQuery,
     useLazySearchProductsQuery,
-    useLazyGetProductsQuery
+    useLazyGetProductsQuery,
+    useForgotPasswordMutation,
+    useResetPasswordMutation
 } = Api

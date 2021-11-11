@@ -1,24 +1,25 @@
 import Filter from '../Filter';
 import FilterHeader from '../FilterHeader';
-import {
-  allFilterValues,
-  SizeFilter,
-  useFilters,
-} from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
 import FilterListItem from '../FilterListItem';
+import { sizeValues } from '~/products/FiltersContext';
+import { Size } from '~/types/products';
 
 const SizesFilter = () => {
-  const { sizes, setSizes } = useFilters();
+  const {
+    filtersSetters: { setSizes },
+    filtersState: { sizes },
+  } = useFilters();
 
   const selectAllHandler = () => {
-    setSizes(allFilterValues.sizes);
+    setSizes(sizeValues);
   };
 
   const clearHandler = () => {
     setSizes([]);
   };
 
-  const toggleSize = (val: SizeFilter) => {
+  const toggleSize = (val: Size) => {
     setSizes((prev) => {
       if (prev.includes(val)) {
         return prev.filter((size) => size !== val);
@@ -36,7 +37,7 @@ const SizesFilter = () => {
         selectedCount={sizes.length}
       />
       <ul style={{ maxHeight: 300 }}>
-        {allFilterValues.sizes.map((value) => (
+        {sizeValues.map((value) => (
           <FilterListItem
             key={`size-${value}`}
             isActive={sizes.includes(value)}

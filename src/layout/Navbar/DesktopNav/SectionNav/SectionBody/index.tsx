@@ -11,11 +11,13 @@ const useStyles = makeStyles<Theme, { color: SectionColor }>((theme) => ({
   section: ({ color }) => ({
     backgroundColor: theme.palette[color]?.light || theme.palette.success.light,
     width: '100%',
+    height: 360,
   }),
   sectionContent: {
     padding: '1rem',
     maxWidth: '95%',
     paddingTop: '1.5rem',
+    height: '100%',
   },
   sectionLinks: {
     width: '100%',
@@ -34,6 +36,7 @@ const useStyles = makeStyles<Theme, { color: SectionColor }>((theme) => ({
   },
   bestseller: {
     display: 'none',
+    height: '100%',
     [theme.breakpoints.up('lg')]: {
       display: 'flex',
     },
@@ -51,7 +54,7 @@ const SectionBody: FC<SectionBodyProps> = ({ color }) => {
   return (
     <div className={classes.section}>
       <Container className={classes.sectionContent} maxWidth={false}>
-        <Grid container spacing={6}>
+        <Grid container spacing={6} sx={{ height: '100%' }}>
           <Grid item xs={12} lg={8}>
             <UnderlinedLink
               to={`/category/${activeCategory?.title}/${activeSubCategory?.title}`}
@@ -78,9 +81,11 @@ const SectionBody: FC<SectionBodyProps> = ({ color }) => {
             </ul>
           </Grid>
           <Grid item xs={2} />
-          <Grid item lg={2} className={classes.bestseller}>
-            <Bestseller />
-          </Grid>
+          {activeSubCategory?.bestseller && (
+            <Grid item lg={2} className={classes.bestseller}>
+              <Bestseller product={activeSubCategory.bestseller} />
+            </Grid>
+          )}
         </Grid>
       </Container>
     </div>

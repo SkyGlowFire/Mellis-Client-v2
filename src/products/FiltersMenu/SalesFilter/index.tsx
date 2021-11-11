@@ -1,9 +1,12 @@
-import { useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
 import Filter from '../Filter';
 import FilterListItem from '../FilterListItem';
 
 const SalesFilter = () => {
-  const { sale, setSale } = useFilters();
+  const {
+    filtersState: { sale },
+    filtersSetters: { setSale },
+  } = useFilters();
   return (
     <Filter name="sale" showCloseBtn={sale === true}>
       <ul style={{ maxHeight: 300 }}>

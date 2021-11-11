@@ -26,7 +26,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
     },
   },
   header: {
-    backgroundColor: theme.palette.info.light,
+    backgroundColor: theme.palette.success.light,
     width: '100%',
     padding: '1rem',
   },

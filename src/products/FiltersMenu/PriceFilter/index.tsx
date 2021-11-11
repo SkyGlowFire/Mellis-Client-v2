@@ -2,7 +2,7 @@ import { FC, ChangeEvent, FocusEvent, useState, useEffect } from 'react';
 import Filter from '../Filter';
 import { Slider, TextField, InputAdornment } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
 
 const useStyles = makeStyles({
   root: {
@@ -38,7 +38,10 @@ const useStyles = makeStyles({
 });
 
 const PriceFilter: FC = () => {
-  const { price, setPrice, minPrice, maxPrice } = useFilters();
+  const {
+    filtersState: { minPrice, maxPrice, price },
+    filtersSetters: { setPrice },
+  } = useFilters();
   const classes = useStyles();
   const [minVal, setMinVal] = useState<string>(String(minPrice));
   const [maxVal, setMaxVal] = useState<string>(String(maxPrice));

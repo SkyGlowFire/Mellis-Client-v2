@@ -5,17 +5,17 @@ import { Fade, Box, Typography, Theme } from '@mui/material';
 import { useLocation } from 'react-router';
 import { useLazySearchProductsQuery } from '~/app/api';
 import FiltersMenu from '../FiltersMenu';
-import { useFilters } from '../context/FiltersContext';
+import { useFilters } from '~/app/hooks';
 import MainContent from './MainContent';
 import { useAppDispatch } from '~/app/hooks';
 import { setSearchText } from '~/common/state/mainSlice';
 import { navHeight, navHeight2, searchbarHeight } from '~/styles/constants';
 
 const useStyles = makeStyles<Theme>((theme) => ({
-  root: {
+  searchpage: {
     position: 'fixed',
     top: navHeight + searchbarHeight + 1,
-    width: '100vw',
+    width: '100%',
     bottom: 0,
     zIndex: 100,
     backgroundColor: '#fff',
@@ -31,7 +31,9 @@ const SearchProducts: FC = () => {
   const { searchQuery } = useAppSelector((state) => state.main);
   const classes = useStyles();
   const location = useLocation();
-  const { setmaxPrice, setminPrice } = useFilters();
+  const {
+    filtersSetters: { setmaxPrice, setminPrice },
+  } = useFilters();
   const dispatch = useAppDispatch();
 
   const [searchProducts, { data }] = useLazySearchProductsQuery();
@@ -43,20 +45,20 @@ const SearchProducts: FC = () => {
   }, [searchQuery, location.search, searchProducts]);
 
   useEffect(() => {
-    if (searchQuery !== '') {
-      if (data?.minPrice) setminPrice(data.minPrice);
-      if (data?.maxPrice) setmaxPrice(data.maxPrice);
+    if (searchQuery !== '' && data) {
+      setminPrice(data.minPrice || 0);
+      setmaxPrice(data.maxPrice || 100);
     }
   }, [data, setmaxPrice, setminPrice, searchQuery]);
 
   return (
     <Fade in={searchQuery !== ''}>
-      <div className={classes.root}>
+      <div className={classes.searchpage}>
         {data && (
           <Box>
             <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
               <Typography variant="h6" color="primary">
-                The search {searchQuery} has {data.total} results
+                The search "{searchQuery}" has {data.total} results
               </Typography>
               <div
                 onClick={() => dispatch(setSearchText(''))}

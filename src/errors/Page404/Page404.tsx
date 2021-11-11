@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { makeStyles } from '@mui/styles';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { Theme } from '@mui/material';
+import MainLayout from '~/layout/MainLayout/MainLayout';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -28,17 +29,19 @@ interface Page404Props {}
 const Page404: FC<Page404Props> = () => {
   const classes = useStyles();
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <div className={classes.title}>
-        <WarningRoundedIcon
-          className={classes.icon}
-          fontSize="large"
-          color="error"
-        />
-        <Typography variant="h4">Page Not Found</Typography>
-      </div>
-      <Typography variant="body1">Sorry, this page does not exist</Typography>
-    </Container>
+    <MainLayout>
+      <Container maxWidth="md" className={classes.root}>
+        <div className={classes.title}>
+          <WarningRoundedIcon
+            className={classes.icon}
+            fontSize="large"
+            color="error"
+          />
+          <Typography variant="h4">Page Not Found</Typography>
+        </div>
+        <Typography variant="body1">Sorry, this page does not exist</Typography>
+      </Container>
+    </MainLayout>
   );
 };
 

@@ -1,13 +1,13 @@
-import {
-  useFilters,
-  allFilterValues,
-  SortBy,
-} from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
+import { SortBy, sortByValues } from '~/products/FiltersContext';
 import Filter from '../Filter';
 import FilterListItem from '../FilterListItem';
 
 const SortbyFilter = () => {
-  const { sortBy, setSortBy } = useFilters();
+  const {
+    filtersSetters: { setSortBy },
+    filtersState: { sortBy },
+  } = useFilters();
 
   function selectSort(val: SortBy) {
     if (val !== sortBy) setSortBy(val);
@@ -16,7 +16,7 @@ const SortbyFilter = () => {
   return (
     <Filter name="sortBy" showCloseBtn={sortBy !== 'recommended'}>
       <ul style={{ maxHeight: 300 }}>
-        {allFilterValues.sortBy.map((sortType) => (
+        {sortByValues.map((sortType) => (
           <FilterListItem
             key={`sortby-${sortType}`}
             isActive={sortBy === sortType}

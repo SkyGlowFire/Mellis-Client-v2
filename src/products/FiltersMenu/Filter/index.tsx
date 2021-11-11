@@ -2,7 +2,8 @@ import { makeStyles } from '@mui/styles';
 import { Typography, Button, Theme } from '@mui/material';
 import { fromUrlString } from '~/utils/textFormatters';
 import { FC } from 'react';
-import { FilterName, useFilters } from '~/products/context/FiltersContext';
+import { useFilters } from '~/app/hooks';
+import { FilterName } from '~/products/FiltersContext';
 import CloseIcon from '@mui/icons-material/Close';
 
 interface StyleProps {
@@ -89,8 +90,12 @@ interface FilterProps {
 
 //Wrapper Component for other filters. Includes filter popper header and apply button
 const Filter: FC<FilterProps> = ({ name, children, showCloseBtn }) => {
-  const { activeFilter, setActiveFilter, clearFilter, applyFilters } =
-    useFilters();
+  const {
+    clearFilter,
+    applyFilters,
+    filtersSetters: { setActiveFilter },
+    filtersState: { activeFilter },
+  } = useFilters();
 
   const classes = useStyles({
     open: activeFilter === name,
@@ -127,7 +132,7 @@ const Filter: FC<FilterProps> = ({ name, children, showCloseBtn }) => {
               color="primary"
               variant="contained"
               className={classes.btn}
-              onClick={applyFilters}
+              onClick={() => applyFilters()}
             >
               Apply
             </Button>
