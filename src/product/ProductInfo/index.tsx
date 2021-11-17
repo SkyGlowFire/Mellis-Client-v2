@@ -90,7 +90,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ product }) => {
 
   useEffect(() => {
     setFavorite(items.findIndex((x) => x.product._id === product._id) !== -1);
-  }, [items]);
+  }, [items, product._id]);
 
   function renderNavigation(path: string[]) {
     const links = [];

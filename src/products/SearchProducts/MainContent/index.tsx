@@ -4,7 +4,7 @@ import { Theme } from '@mui/material';
 import { IProduct } from '~/types/products';
 import { FC, useCallback } from 'react';
 import { useAppDispatch } from '~/app/hooks';
-import { setSearchText } from '~/common/state/mainSlice';
+import { setSearchValue } from '~/common/state/mainSlice';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -43,7 +43,7 @@ const MainContent: FC<MainContentProps> = ({ products }) => {
   const dispatch = useAppDispatch();
 
   const clickHandler = useCallback(() => {
-    dispatch(setSearchText(''));
+    dispatch(setSearchValue(''));
   }, [dispatch]);
 
   return (

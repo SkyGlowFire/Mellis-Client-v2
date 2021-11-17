@@ -3,7 +3,8 @@ import { Theme } from '@mui/material';
 import { navHeight, searchbarHeight } from '~/styles/constants';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { ChangeEvent, useState, useEffect } from 'react';
-import { setSearchText, setSearchQuery } from '~/common/state/mainSlice';
+import { setSearchValue } from '~/common/state/mainSlice';
+import { useFilters } from '~/app/hooks';
 
 const useStyles = makeStyles<Theme, { active: boolean }>((theme) => ({
   root: {
@@ -84,35 +85,38 @@ const useStyles = makeStyles<Theme, { active: boolean }>((theme) => ({
 
 const NavSearch = () => {
   const dispatch = useAppDispatch();
-  const { searchText } = useAppSelector((state) => state.main);
+  const { searchValue } = useAppSelector((state) => state.main);
   const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(
     null
   );
-  const classes = useStyles({ active: searchText !== '' });
+  const classes = useStyles({ active: searchValue !== '' });
+  const {
+    filtersSetters: { setSearchText },
+  } = useFilters();
 
   useEffect(() => {
     if (timer) clearTimeout(timer);
-    if (searchText === '') {
-      dispatch(setSearchQuery(''));
+    if (searchValue === '') {
+      setSearchText('');
     } else {
       setTimer(
         setTimeout(() => {
-          dispatch(setSearchQuery(searchText));
+          setSearchText(searchValue);
         }, 500)
       );
     }
-  }, [searchText, dispatch]);
+  }, [searchValue, dispatch, setSearchText]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    dispatch(setSearchText(e.target.value));
+    dispatch(setSearchValue(e.target.value));
   };
 
   return (
     <form className={classes.root} onSubmit={(e) => e.preventDefault()}>
       <input
         className={classes.input}
-        value={searchText}
+        value={searchValue}
         onChange={onChange}
         type="search"
         aria-label="Search"

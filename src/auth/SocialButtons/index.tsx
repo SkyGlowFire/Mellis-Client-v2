@@ -5,6 +5,7 @@ import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { SvgIcon, Grid } from '@mui/material';
+import { ReactComponent as VkIcon } from './images/vk.svg';
 
 const useStyles = makeStyles({
   icon: {
@@ -31,6 +32,10 @@ const SocialButtons = () => {
     window.open(`${API_URI}/auth/login-facebook?from=${fromUrl}`, '_self');
   };
 
+  const loginVk = () => {
+    window.open(`${API_URI}/auth/login-vkontakte?from=${fromUrl}`, '_self');
+  };
+
   return (
     <Grid container gap={2} justifyContent="center" sx={{ mb: 2 }}>
       <SvgIcon
@@ -49,16 +54,17 @@ const SocialButtons = () => {
       />
       <SvgIcon
         className={classes.icon}
-        component={TwitterIcon}
-        sx={{ color: '#55acee' }}
+        component={VkIcon}
+        viewBox="0 0 200 200"
+        onClick={loginVk}
         fontSize="large"
       />
-      <SvgIcon
+      {/* <SvgIcon
         className={classes.icon}
         component={InstagramIcon}
         sx={{ color: '#3f729b' }}
         fontSize="large"
-      />
+      /> */}
     </Grid>
   );
 };

@@ -43,8 +43,9 @@ interface MainState{
         open: boolean
         item: CartItem | null
     },
-    searchText: string
-    searchQuery: string
+    searchValue: string
+    // searchQuery: string
+    searchMode: boolean
 }
 
 const initialState: MainState = {
@@ -69,8 +70,9 @@ const initialState: MainState = {
         open: false,
         item: null
     },
-    searchText: '',
-    searchQuery: ''
+    searchValue: '',
+    // searchQuery: '',
+    searchMode: false
 }
 
 export const mainSlice = createSlice({
@@ -101,11 +103,11 @@ export const mainSlice = createSlice({
         clearError(state){
             state.error = null
         },
-        setSearchText(state, action: PayloadAction<string>){
-            state.searchText = action.payload
+        setSearchValue(state, action: PayloadAction<string>){
+            state.searchValue = action.payload
         },
-        setSearchQuery(state, action: PayloadAction<string>){
-            state.searchQuery = action.payload
+        setSearchMode(state, action: PayloadAction<boolean>){
+            state.searchMode = action.payload
         },
     },
     extraReducers: builder => {
@@ -156,8 +158,8 @@ export const {
     closeAddressModal,
     closeCartItemModal,
     clearError,
-    setSearchText,
-    setSearchQuery
+    setSearchValue,
+    setSearchMode
 } = mainSlice.actions
 
 export default mainSlice.reducer;

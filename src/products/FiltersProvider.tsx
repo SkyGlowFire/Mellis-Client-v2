@@ -18,6 +18,7 @@ export const FiltersProvider: FC = ({ children }) => {
   const [activeFilter, setActiveFilter] = useState<FilterName | null>(null);
   const [minPrice, setminPrice] = useState(Infinity);
   const [maxPrice, setmaxPrice] = useState(-Infinity);
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     setPrice((prev) => [
@@ -47,6 +48,8 @@ export const FiltersProvider: FC = ({ children }) => {
         maxPrice,
         setmaxPrice,
         setminPrice,
+        searchText,
+        setSearchText,
       }}
     >
       {children}

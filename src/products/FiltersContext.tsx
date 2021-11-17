@@ -49,6 +49,8 @@ interface IFiltersContext {
   setminPrice: Dispatch<SetStateAction<number>>;
   maxPrice: number;
   setmaxPrice: Dispatch<SetStateAction<number>>;
+  searchText: string;
+  setSearchText: Dispatch<SetStateAction<string>>;
 }
 
 const initialState: IFiltersContext = {
@@ -70,6 +72,8 @@ const initialState: IFiltersContext = {
   setminPrice: () => {},
   maxPrice: -Infinity,
   setmaxPrice: () => {},
+  searchText: '',
+  setSearchText: () => {},
 };
 
 export const FiltersContext = createContext<IFiltersContext>(initialState);

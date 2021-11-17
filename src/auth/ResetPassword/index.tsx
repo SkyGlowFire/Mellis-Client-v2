@@ -10,6 +10,8 @@ import { useAppDispatch } from '~/app/hooks';
 import { setAlert } from '~/alerts/alertSlice';
 import PasswordInput from '~/common/components/react-hook-form-inputs/PasswordInput/PasswordInput';
 import { useParams } from 'react-router-dom';
+import { getUser } from '~/auth/state/authSlice';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -33,24 +35,26 @@ const ResetPassword: FC = () => {
     resolver: yupResolver(schema),
     defaultValues: { password: '', password2: '' },
   });
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const { token } = useParams<{ token: string }>();
+  const { push } = useHistory();
 
   useEffect(() => {
     if (isSuccess) {
       dispatch(setAlert('Password has been changed', 'success'));
-      reset({ password: '', password2: '' });
+      dispatch(getUser());
+      push('/profile/info');
     }
-  }, [isSuccess]);
+  }, [isSuccess, push, dispatch]);
 
   useEffect(() => {
     if (error && 'status' in error) {
       const errorData = error.data as ErrorResponse;
       dispatch(setAlert(errorData.message, 'error'));
     }
-  }, [error]);
+  }, [error, dispatch]);
 
   const onSubmit = (data: IFormData) => {
     changePassword({ password: data.password, token });

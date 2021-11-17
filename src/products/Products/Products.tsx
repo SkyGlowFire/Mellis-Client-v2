@@ -32,7 +32,7 @@ const Products = () => {
   const classes = useStyles();
   const { category, group, subGroup } = useParams<ProductsUrlParams>();
   const location = useLocation();
-  const { searchQuery } = useAppSelector((state) => state.main);
+  const { searchMode } = useAppSelector((state) => state.main);
   const {
     filtersSetters: { setmaxPrice, setminPrice },
   } = useFilters();
@@ -40,7 +40,7 @@ const Products = () => {
   const [getProducts, { data }] = useLazyGetProductsQuery();
 
   useEffect(() => {
-    if (searchQuery === '') {
+    if (!searchMode) {
       getProducts({
         category,
         group,
@@ -48,14 +48,14 @@ const Products = () => {
         filters: location.search,
       });
     }
-  }, [category, group, subGroup, searchQuery, location.search, getProducts]);
+  }, [category, group, subGroup, searchMode, location.search, getProducts]);
 
   useEffect(() => {
-    if (searchQuery === '' && data) {
+    if (!searchMode && data) {
       setminPrice(data.minPrice || 0);
       setmaxPrice(data.maxPrice || 100);
     }
-  }, [data, setmaxPrice, setminPrice, searchQuery]);
+  }, [data, setmaxPrice, setminPrice, searchMode]);
 
   return (
     <>

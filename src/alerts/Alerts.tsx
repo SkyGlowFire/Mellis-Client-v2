@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
     position: 'fixed',
     top: 80,
     width: '100%',
-    zIndex: 100,
+    zIndex: 10000,
   },
 }));
 

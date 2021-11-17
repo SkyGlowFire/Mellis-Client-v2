@@ -60,14 +60,14 @@ const Checkout = () => {
       price: totalPrice,
     };
     createOrder(newOrder);
-    dispatch(clearCart());
   };
 
   useEffect(() => {
     if (isSuccess) {
+      dispatch(clearCart());
       history.push('/profile/orders');
     }
-  }, [isSuccess, history]);
+  }, [isSuccess, history, dispatch]);
 
   return items.length === 0 ? (
     <Redirect to="/cart" />

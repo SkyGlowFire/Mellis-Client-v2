@@ -46,7 +46,7 @@ const ForgotPassword: FC = () => {
       const errorData = error.data as ErrorResponse;
       dispatch(setAlert(errorData.message, 'error'));
     }
-  }, [error]);
+  }, [error, dispatch]);
 
   const onSubmit = (data: { email: string }) => {
     sendPasswordChangeRequest(data);

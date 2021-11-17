@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { ICategory } from "../types/categories";
 import { IProduct, IProductPopulated } from "~/types/products";
 import { Address, IUser } from '~/types/user';
@@ -7,6 +7,7 @@ import { AddAddressDto } from './dto/addAddress.sto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { IOrder } from '~/types/orders';
 import { CreateOrderDto } from './dto/createOrder.dto';
+import { logOut } from '~/auth/state/authSlice';
 
 const API_URI = process.env.REACT_APP_API_URI
 
@@ -37,8 +38,27 @@ export interface ErrorResponse{
   message: string
 }
 
+const baseQuery = fetchBaseQuery({ baseUrl: API_URI, credentials: 'include' })
+
+const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
+  let result = await baseQuery(args, api, extraOptions)
+  if(result.error && result.error.status === 401){
+    const refreshResult = await baseQuery('/auth/refresh', api, extraOptions)
+    if(refreshResult.data){
+      result = await baseQuery(args, api, extraOptions)
+    } else {
+      api.dispatch(logOut())
+    }  
+  }
+  return result
+}
+
 export const Api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: API_URI, credentials: 'include' }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Categories', 'Products', 'Looks', 'Orders', 'User', 'Addresses'],
   endpoints: (builder) => ({
     //auth

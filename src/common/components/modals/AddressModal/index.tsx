@@ -1,10 +1,15 @@
 import { Dialog, Container, DialogContent, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { closeAddressModal } from '~/common/state/mainSlice';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
-import { useAddAddressMutation, useUpdateAddressMutation } from '~/app/api';
+import {
+  ErrorResponse,
+  useAddAddressMutation,
+  useUpdateAddressMutation,
+} from '~/app/api';
 import AddressForm, { AddressFormProps } from '~/common/components/AddressForm';
+import { setAlert } from '~/alerts/alertSlice';
 
 const useStyles = makeStyles({
   root: {
@@ -19,11 +24,24 @@ const AddressModal = () => {
   const dispatch = useAppDispatch();
   const { address, open } = useAppSelector((state) => state.main.addressModal);
   const [addAddress] = useAddAddressMutation();
-  const [updateAddress] = useUpdateAddressMutation();
+  const [updateAddress, { error, isSuccess }] = useUpdateAddressMutation();
 
   const handleClose = useCallback(() => {
     dispatch(closeAddressModal());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (error && 'status' in error) {
+      const errorData = error.data as ErrorResponse;
+      dispatch(setAlert(errorData.message, 'error'));
+    }
+  }, [dispatch, error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleClose();
+    }
+  }, [isSuccess, handleClose]);
 
   const onSubmit: AddressFormProps['onSubmit'] = useCallback(
     (data) => {
@@ -32,9 +50,8 @@ const AddressModal = () => {
       } else {
         updateAddress({ id: address._id, data });
       }
-      handleClose();
     },
-    [handleClose, address, addAddress, updateAddress]
+    [address, addAddress, updateAddress]
   );
 
   return (

@@ -73,7 +73,7 @@ const ProductCard: FC<ProductCardProps> = ({ product, onClick }) => {
     setFavorite(
       favorites.findIndex((x) => x.product._id === product._id) !== -1
     );
-  }, [favorites]);
+  }, [favorites, product._id]);
 
   const cardClickHandler = () => {
     if (onClick) onClick();

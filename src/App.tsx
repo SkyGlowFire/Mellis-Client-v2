@@ -20,6 +20,7 @@ import { setFavItems } from '~/favorites/favoritesSlice';
 import ForgotPassword from '~/auth/ForgotPassword/ForgotPassword';
 import ResetPassword from '~/auth/ResetPassword';
 import EmailSent from '~/auth/EmailSent';
+import { setSearchMode, setSearchValue } from '~/common/state/mainSlice';
 
 const sessionKeys = {
   CART_ITEMS: 'CART_ITEMS',
@@ -31,29 +32,55 @@ function App() {
   const dispatch = useAppDispatch();
   const firstRender = useRef(true);
   const { push } = useHistory();
-  const { searchQuery } = useAppSelector((state) => state.main);
+  const { searchMode } = useAppSelector((state) => state.main);
   const { items: cartItems } = useAppSelector((state) => state.cart);
   const { items: favItems } = useAppSelector((state) => state.favorites);
 
   const {
     setDefaultFilters,
-    filtersState: { filterQuery },
+    filtersState: { filterQuery, searchText },
+    applyFilters,
   } = useFilters();
 
   useEffect(() => {
     if (firstRender.current) {
       setDefaultFilters(location.search);
     }
-  }, [location, setDefaultFilters, firstRender]);
+  }, [location.search, setDefaultFilters, firstRender]);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      const params = new URLSearchParams(location.search);
+      const searchText = params.get('search');
+      if (searchText) {
+        dispatch(setSearchValue(searchText));
+      }
+    }
+  }, [location.search, firstRender, dispatch]);
+
+  useEffect(() => {
+    dispatch(setSearchMode(searchText !== ''));
+  }, [searchText, dispatch]);
+
+  useEffect(() => {
+    if (firstRender.current) return;
+    applyFilters();
+  }, [searchText]);
 
   useEffect(() => {
     if (firstRender.current) return;
     let url = `${location.pathname}?`;
+    const params = new URLSearchParams(location.search);
+    const from = params.get('from');
+    if (from) url += `from=${from}&`;
     url += `${filterQuery}`;
-    if (filterQuery !== '' && searchQuery) url += `&`;
-    if (searchQuery) url += `search=${searchQuery}`;
     push(url);
-  }, [filterQuery, push, location.pathname, searchQuery]);
+  }, [filterQuery, push, location.pathname, location.search]);
+
+  useEffect(() => {
+    if (firstRender.current) return;
+    dispatch(setSearchValue(''));
+  }, [location.pathname, dispatch]);
 
   useEffect(() => {
     if (!firstRender.current) {
@@ -78,7 +105,7 @@ function App() {
       dispatch(setFavItems(JSON.parse(exFavItems)));
     }
     firstRender.current = false;
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

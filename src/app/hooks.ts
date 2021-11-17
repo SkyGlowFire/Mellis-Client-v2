@@ -1,5 +1,4 @@
 import { TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {useEffect} from 'react'
 import type { RootState, AppDispatch } from './store';
 import {
     useFiltersContext,
@@ -33,7 +32,9 @@ export const useFilters = () => {
         setmaxPrice, 
         setminPrice,
         activeFilter,
-        setActiveFilter
+        setActiveFilter,
+        searchText,
+        setSearchText
     } = useFiltersContext()
 
     const setDefaultFilters = useCallback(
@@ -81,8 +82,15 @@ export const useFilters = () => {
             } else {
                 setSortBy('recommended')
             }
+
+            const searchQuery = queryFilters.get('search');
+            if (searchQuery) {
+                setSearchText(searchQuery)
+            } else {
+                setSearchText('')
+            }
         },
-    [setSortBy, setSizes, setColors, setPrice, setSale, minPrice, maxPrice]
+    [setSortBy, setSizes, setColors, setPrice, setSale, minPrice, maxPrice, setSearchText]
   );
 
   const applyFilters = useCallback((clearFilter?: FilterName) => {
@@ -104,9 +112,12 @@ export const useFilters = () => {
     if ((price[0] !== minPrice || price[1] !== maxPrice) && clearFilter !== 'price') {
       query += `price=[${price.join('+')}]&`;
     }
+    if (searchText !== '') {
+      query += `search=${searchText}&`;
+    }
     if (query !== '') query = query.slice(0, -1);
     setFilterQuery(query);
-  }, [sizes, colors, sortBy, sale, price, setFilterQuery, minPrice, maxPrice]);
+  }, [sizes, colors, sortBy, sale, price, setFilterQuery, minPrice, maxPrice, searchText]);
 
   const clearFilter = useCallback((name: FilterName) => {
     if (name === 'sizes') {
@@ -121,12 +132,21 @@ export const useFilters = () => {
         setSale(false)
     }
     applyFilters(name)
-  }, [applyFilters, setSale, setSizes, setSortBy, setColors])
+  }, [applyFilters, setSale, setSizes, setSortBy, setColors, minPrice, maxPrice, setPrice])
 
-  const filtersSetters = {setSortBy, setColors, setSizes, setPrice, setFilterQuery, setSale, setmaxPrice, setminPrice, setActiveFilter}
-  const filtersState = {sortBy, colors, sizes, price, filterQuery, activeFilter, sale, maxPrice, minPrice}
+  const clearAllFilters = useCallback(() => {
+    setSizes([])
+    setColors([])
+    setPrice([minPrice, maxPrice])
+    setSortBy('recommended')
+    setSale(false)
+    setFilterQuery(searchText !== '' ? `search=${searchText}` : '')
+  }, [setSale, setSizes, setSortBy, setColors, setFilterQuery, searchText, minPrice, maxPrice, setPrice])
+
+  const filtersSetters = {setSortBy, setColors, setSizes, setPrice, setFilterQuery, setSale, setmaxPrice, setminPrice, setActiveFilter, setSearchText}
+  const filtersState = {sortBy, colors, sizes, price, filterQuery, activeFilter, sale, maxPrice, minPrice, searchText}
 
   return {
-      applyFilters, setDefaultFilters, clearFilter, filtersSetters, filtersState
+      applyFilters, setDefaultFilters, clearFilter, filtersSetters, filtersState, clearAllFilters
   }
 }
