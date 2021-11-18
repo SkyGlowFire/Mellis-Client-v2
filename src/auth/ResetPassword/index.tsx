@@ -1,5 +1,9 @@
 import { FC, useEffect } from 'react';
-import { ErrorResponse, useResetPasswordMutation } from '~/app/api';
+import {
+  ErrorResponse,
+  useResetPasswordMutation,
+  useLazyGetUserQuery,
+} from '~/app/api';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button, Container, Typography, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -10,7 +14,6 @@ import { useAppDispatch } from '~/app/hooks';
 import { setAlert } from '~/alerts/alertSlice';
 import PasswordInput from '~/common/components/react-hook-form-inputs/PasswordInput/PasswordInput';
 import { useParams } from 'react-router-dom';
-import { getUser } from '~/auth/state/authSlice';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -40,11 +43,12 @@ const ResetPassword: FC = () => {
   const dispatch = useAppDispatch();
   const { token } = useParams<{ token: string }>();
   const { push } = useHistory();
+  const [getUser] = useLazyGetUserQuery();
 
   useEffect(() => {
     if (isSuccess) {
       dispatch(setAlert('Password has been changed', 'success'));
-      dispatch(getUser());
+      getUser();
       push('/profile/info');
     }
   }, [isSuccess, push, dispatch]);

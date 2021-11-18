@@ -6,24 +6,24 @@ import favReducer from '~/favorites/favoritesSlice';
 import authReducer from '~/auth/state/authSlice'
 import alertsReducer from '~/alerts/alertSlice'
 import {createBrowserHistory } from 'history'
-import {Api} from './api'
+import {api} from './api'
 
 export const history = createBrowserHistory()
 
 const rootReducer = combineReducers({
+  [api.reducerPath]: api.reducer,
   main: mainReducer,
   cart: cartReducer,
   favorites: favReducer,
   auth: authReducer,
   alerts: alertsReducer,
-  [Api.reducerPath]: Api.reducer,
 })
 
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => 
     getDefaultMiddleware()
-    .concat(Api.middleware)
+    .concat(api.middleware)
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -14,13 +14,13 @@ import { useLocation, Redirect, Link } from 'react-router-dom';
 import TextInputWithIcon from '~/common/components/react-hook-form-inputs/TextInputWithIcon/TextInputWithIcon';
 import PasswordInput from '~/common/components/react-hook-form-inputs/PasswordInput/PasswordInput';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { signUp, clearAuthError } from '~/auth/state/authSlice';
-import { SignUpUserDto } from '~/auth/state/dto/loginUser.dto';
+import { SignUpUserDto } from '~/app/dto/signupUser.dto';
 import { setAlert } from '~/alerts/alertSlice';
 import { useEffect } from 'react';
 import { navHeight, navHeight2, searchbarHeight } from '~/styles/constants';
 import { makeStyles } from '@mui/styles';
 import SocialButtons from '../SocialButtons';
+import { ErrorResponse, useSignupMutation } from '~/app/api';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -34,17 +34,18 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 const Register = () => {
   const dispatch = useAppDispatch();
-  const { isAuth, error } = useAppSelector((state) => state.auth);
+  const { isAuth } = useAppSelector((state) => state.auth);
   const classes = useStyles();
+  const [signup, { error }] = useSignupMutation();
 
   const onSubmit = (data: SignUpUserDto) => {
-    dispatch(signUp(data));
+    signup(data);
   };
 
   useEffect(() => {
-    if (error) {
-      dispatch(setAlert(error, 'error'));
-      dispatch(clearAuthError());
+    if (error && 'status' in error) {
+      const errorData = error.data as ErrorResponse;
+      dispatch(setAlert(errorData.message, 'error'));
     }
   }, [error, dispatch]);
 

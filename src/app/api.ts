@@ -7,7 +7,8 @@ import { AddAddressDto } from './dto/addAddress.sto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { IOrder } from '~/types/orders';
 import { CreateOrderDto } from './dto/createOrder.dto';
-import { logOut } from '~/auth/state/authSlice';
+import { LoginUserDto } from './dto/loginUser.dto';
+import {SignUpUserDto} from './dto/signupUser.dto'
 
 const API_URI = process.env.REACT_APP_API_URI
 
@@ -38,6 +39,8 @@ export interface ErrorResponse{
   message: string
 }
 
+export type SocialMedia = 'google' | 'facebook' | 'vkontakte' | 'twitter'
+
 const baseQuery = fetchBaseQuery({ baseUrl: API_URI, credentials: 'include' })
 
 const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
@@ -51,13 +54,13 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     if(refreshResult.data){
       result = await baseQuery(args, api, extraOptions)
     } else {
-      api.dispatch(logOut())
+      return Promise.reject(result.error)
     }  
   }
   return result
 }
 
-export const Api = createApi({
+export const api = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Categories', 'Products', 'Looks', 'Orders', 'User', 'Addresses'],
   endpoints: (builder) => ({
@@ -75,6 +78,41 @@ export const Api = createApi({
         url: `/auth/resetPasword/${token}`,
         method: 'PUT',
         body: {password}
+      })
+    }),
+
+    loginWithSocialMedia: builder.mutation<IUser, {token: string, media: SocialMedia}>({
+      query: ({media, ...data}) => ({
+        url: `/auth/login-${media}`,
+        method: 'POST',
+        body: data
+      })
+    }),
+
+    loginLocal: builder.mutation<IUser, LoginUserDto>({
+      query: (data) => ({
+        url: '/auth/login-local',
+        method: 'POST',
+        body: data
+      }),
+    }),
+
+    signup: builder.mutation<IUser, SignUpUserDto>({
+      query: (data) => ({
+        url: '/auth/signup',
+        method: 'POST',
+        body: data
+      })
+    }),
+
+    getUser: builder.query<IUser, void>({
+      query: () => `/auth/me`
+    }),
+
+    logout: builder.mutation<{success: true}, void>({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'GET',
       })
     }),
 
@@ -202,5 +240,11 @@ export const {
     useLazySearchProductsQuery,
     useLazyGetProductsQuery,
     useForgotPasswordMutation,
-    useResetPasswordMutation
-} = Api
+    useResetPasswordMutation,
+    useLoginWithSocialMediaMutation,
+    useLoginLocalMutation,
+    useSignupMutation,
+    useGetUserQuery,
+    useLogoutMutation,
+    useLazyGetUserQuery
+} = api

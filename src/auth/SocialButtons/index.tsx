@@ -6,6 +6,8 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { SvgIcon, Grid } from '@mui/material';
 import { ReactComponent as VkIcon } from './images/vk.svg';
+import { GoogleLogin } from 'react-google-login';
+import GoogleButton from './GoogleButton';
 
 const useStyles = makeStyles({
   icon: {
@@ -45,13 +47,14 @@ const SocialButtons = () => {
         fontSize="large"
         onClick={loginFacebook}
       />
-      <SvgIcon
+      {/* <SvgIcon
         className={classes.icon}
         component={GoogleIcon}
         sx={{ color: '#dc4e41' }}
         fontSize="large"
         onClick={loginGoogle}
-      />
+      /> */}
+      <GoogleButton />
       <SvgIcon
         className={classes.icon}
         component={VkIcon}

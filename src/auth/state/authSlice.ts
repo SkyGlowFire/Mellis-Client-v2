@@ -1,75 +1,24 @@
-import { createSlice,  createAsyncThunk, AnyAction } from '@reduxjs/toolkit';
-import { fetchUser, loginAPI, registerAPI, logOutAPI } from './authAPI';
+import { createSlice, AnyAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { LoginUserDto, SignUpUserDto } from './dto/loginUser.dto';
-import { AxiosError} from 'axios';
 import {IUser} from '~/types/user'
+import { api } from '~/app/api';
 
 export type Role = 'admin' | 'editor' | 'customer'
 
-export const getUser = createAsyncThunk(
-  'auth/fetchUser',
-  async (_, {rejectWithValue}) => {
-     try {
-      const res = await fetchUser()
-      return res.data
-    } catch (error) {
-      const err = error as AxiosError   
-      return rejectWithValue(err.response)
-    }
-  }
-);
-
-export const login = createAsyncThunk(
-  'auth/login',
-  async (dto: LoginUserDto, {rejectWithValue, dispatch}) => {
-    try {
-      await loginAPI(dto)
-      return dispatch(getUser())
-    } catch (error) {
-      const err = error as AxiosError    
-      return rejectWithValue(err.response?.data)
-    }
-  }
-);
-
-export const signUp = createAsyncThunk(
-  'auth/signup',
-  async (dto: SignUpUserDto, {rejectWithValue, dispatch}) => {
-    try {
-      await registerAPI(dto)
-      return dispatch(getUser())
-    } catch (error) {
-      const err = error as AxiosError    
-      return rejectWithValue(err.response?.data)
-    }
-  }
-);
-
-export const logOut = createAsyncThunk(
-  'auth/logout',
-  async (_, {rejectWithValue, dispatch}) => {
-    try {
-      await logOutAPI()
-    } catch (error) {
-      const err = error as AxiosError    
-      return rejectWithValue(err.response?.data)
-    }
-  }
-);
+const isRejectedAction = (action: AnyAction): action is AnyAction => { 
+  return action.type.endsWith("/rejected");
+};
 
 interface AuthState{
     isAuth: boolean
     user: IUser | null
     loading: boolean
-    error: null | string
 }
 
 const initialState: AuthState = {
     isAuth: false,
     user: null,
     loading: true,
-    error: null
 }
 
 export const authSlice = createSlice({
@@ -79,61 +28,77 @@ export const authSlice = createSlice({
         clearUser: (state) => {
             state.isAuth = false
             state.user = null
-        },
-        clearAuthError: (state) => {
-            state.error = null
-        },
+        }
     },
     extraReducers: builder => {
         builder
-        .addCase(login.pending, (state) => {
-            state.loading = true
-            state.error = null
-        })
-        .addCase(login.rejected, (state, action: AnyAction) => {
-            const {payload} = action
-            state.loading = false
-            if(payload?.status === 'FETCH_ERROR'){
-                state.error = 'Server does not respond'
-                return
-            }
-            state.error = payload?.data?.message || payload?.message
-        })
-         .addCase(signUp.rejected, (state, action: AnyAction) => {
-            const {payload} = action
-            state.loading = false
-            if(payload?.status === 'FETCH_ERROR'){
-                state.error = 'Server does not respond'
-                return
-            }
-            state.error = payload?.data?.message || payload?.message
-        })
-        .addCase(signUp.pending, (state) => {
-            state.loading = true
-            state.error = null
-        })
-        .addCase(getUser.pending, (state) => {
-            state.loading = true
-        })
-        .addCase(getUser.fulfilled, (state, action) => {
-            state.loading = false
-            state.user = action.payload
-            state.isAuth = true
-        })
-        .addCase(getUser.rejected, (state) => {
-            state.loading = false
-            state.isAuth = false
-            state.user = null
-        })
-        .addMatcher((action: AnyAction) => {
-          return action.type.startsWith('auth/logout')
-        }, (state) => {
+        .addMatcher(api.endpoints.signup.matchPending , (state) => {
+          state.loading = true
           state.isAuth = false
+        })
+        .addMatcher(api.endpoints.signup.matchRejected , (state) => {
+          state.loading = false
+        })
+        .addMatcher(api.endpoints.signup.matchFulfilled , (state, {payload}) => {
+          state.loading = false
+          state.user = payload
+          state.isAuth = true
+        })
+        .addMatcher(api.endpoints.loginLocal.matchPending , (state) => {
+          state.loading = true
+          state.isAuth = false
+        })
+        .addMatcher(api.endpoints.loginLocal.matchRejected , (state) => {
+          state.loading = false
+        })
+        .addMatcher(api.endpoints.loginLocal.matchFulfilled , (state, {payload}) => {
+          state.loading = false
+          state.user = payload
+          state.isAuth = true
+        })
+        .addMatcher(api.endpoints.loginWithSocialMedia.matchPending , (state) => {
+          state.loading = true
+          state.isAuth = false
+        })
+        .addMatcher(api.endpoints.loginWithSocialMedia.matchRejected , (state) => {
+          state.loading = false
+        })
+        .addMatcher(api.endpoints.loginWithSocialMedia.matchFulfilled , (state, {payload}) => {
+          state.loading = false
+          state.user = payload
+          state.isAuth = true
+        })
+        .addMatcher(api.endpoints.logout.matchPending , (state) => {
+          state.loading = true
           state.user = null
+          state.isAuth = false
+        })
+        .addMatcher(api.endpoints.logout.matchFulfilled , (state) => {
+          state.loading = false
+        })
+        .addMatcher(api.endpoints.logout.matchRejected , (state) => {
+          state.loading = false
+        })
+        .addMatcher(api.endpoints.getUser.matchPending , (state) => {
+          state.loading = true
+        })
+        .addMatcher(api.endpoints.getUser.matchFulfilled , (state, {payload}) => {
+          state.loading = false
+          state.user = payload
+          state.isAuth = true
+        })
+        .addMatcher(api.endpoints.getUser.matchRejected , (state) => {
+          state.loading = false
+        })
+        .addMatcher(isRejectedAction, (state, action: AnyAction) => {
+            if(action.payload?.status === 401){
+              state.user = null
+              state.isAuth = false
+            }
         })
     }
 })
 
-export const {clearUser, clearAuthError} = authSlice.actions
+export const {clearUser} = authSlice.actions
 export const getMe = (state: RootState) => state.auth.user
 export default authSlice.reducer;

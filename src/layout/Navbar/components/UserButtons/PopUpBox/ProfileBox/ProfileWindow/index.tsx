@@ -15,8 +15,8 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import { FC, Fragment } from 'react';
 import { IUser } from '~/types/user';
-import { useAppDispatch } from '~/app/hooks';
-import { logOut } from '~/auth/state/authSlice';
+import { useLogoutMutation } from '~/app/api';
+import { useGoogleLogout } from 'react-google-login';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -32,6 +32,8 @@ const useStyles = makeStyles<Theme>((theme) => ({
   },
 }));
 
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+
 const links = [
   { icon: <PaymentIcon />, text: 'My orders', to: 'orders' },
   { icon: <AccountBoxIcon />, text: 'Personal info', to: 'info' },
@@ -46,22 +48,39 @@ interface ProfileWindowProps {
 const ProfileWindow: FC<ProfileWindowProps> = ({ onClose, user }) => {
   const classes = useStyles();
   const history = useHistory();
-  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+
+  const googleLogoutSucces = () => {
+    console.log('Google logout success');
+  };
+
+  const googleLogoutFail = () => {
+    console.log('Google logout fail');
+  };
+
+  const { signOut: googleLogout } = useGoogleLogout({
+    clientId,
+    onLogoutSuccess: googleLogoutSucces,
+    onFailure: googleLogoutFail,
+  });
+
   const clickHandler = (link: typeof links[number]) => () => {
     history.push(`/profile/${link.to}`);
     onClose();
   };
+
+  const logoutHandler = () => {
+    googleLogout();
+    logout();
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.header}>
         <Typography style={{ marginBottom: '1.2rem' }}>
           {user.username}
         </Typography>
-        <Link
-          color="textPrimary"
-          onClick={() => dispatch(logOut())}
-          underline="hover"
-        >
+        <Link color="textPrimary" onClick={logoutHandler} underline="hover">
           Logout
         </Link>
       </div>

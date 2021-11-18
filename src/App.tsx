@@ -11,7 +11,7 @@ import Cart from '~/cart';
 import Favorites from '~/favorites';
 import Checkout from '~/checkout';
 import Profile from '~/profile/Profile';
-import { getUser } from '~/auth/state/authSlice';
+// import { getUser } from '~/auth/state/authSlice';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Register from '~/auth/Register';
 import { useFilters } from '~/app/hooks';
@@ -21,6 +21,7 @@ import ForgotPassword from '~/auth/ForgotPassword/ForgotPassword';
 import ResetPassword from '~/auth/ResetPassword';
 import EmailSent from '~/auth/EmailSent';
 import { setSearchMode, setSearchValue } from '~/common/state/mainSlice';
+import { useGetUserQuery } from '~/app/api';
 
 const sessionKeys = {
   CART_ITEMS: 'CART_ITEMS',
@@ -32,10 +33,10 @@ function App() {
   const dispatch = useAppDispatch();
   const firstRender = useRef(true);
   const { push } = useHistory();
-  const { searchMode } = useAppSelector((state) => state.main);
+  // const { searchMode } = useAppSelector((state) => state.main);
   const { items: cartItems } = useAppSelector((state) => state.cart);
   const { items: favItems } = useAppSelector((state) => state.favorites);
-
+  useGetUserQuery();
   const {
     setDefaultFilters,
     filtersState: { filterQuery, searchText },
@@ -111,9 +112,9 @@ function App() {
     window.scrollTo(0, 0);
   }, [location]);
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUser());
+  // }, [dispatch]);
 
   return (
     <MainLayout>

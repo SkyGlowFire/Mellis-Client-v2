@@ -10,18 +10,18 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { makeStyles } from '@mui/styles';
 import { schema } from './validationSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { login, clearAuthError } from '../state/authSlice';
 import { useLocation, Redirect, Link } from 'react-router-dom';
 import {
   TextInputWithIcon,
   PasswordInput,
 } from '~/common/components/react-hook-form-inputs';
-import { LoginUserDto } from '~/auth/state/dto/loginUser.dto';
+import { LoginUserDto } from '~/app/dto/loginUser.dto';
 import { FC, useEffect } from 'react';
 import { navHeight, navHeight2, searchbarHeight } from '~/styles/constants';
 import { useAppSelector, useAppDispatch } from '~/app/hooks';
 import { setAlert } from '~/alerts/alertSlice';
 import SocialButtons from '../SocialButtons';
+import { ErrorResponse, useLoginLocalMutation } from '~/app/api';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -39,16 +39,17 @@ const Login: FC = () => {
   const searchParams = new URLSearchParams(useLocation().search);
   const fromUrl = searchParams.get('from') || '/profile/info';
   const dispatch = useAppDispatch();
-  const { isAuth, error } = useAppSelector((state) => state.auth);
+  const { isAuth } = useAppSelector((state) => state.auth);
+  const [login, { error }] = useLoginLocalMutation();
 
   const onSubmit = (data: LoginUserDto) => {
-    dispatch(login(data));
+    login(data);
   };
 
   useEffect(() => {
-    if (error) {
-      dispatch(setAlert(error, 'error'));
-      dispatch(clearAuthError());
+    if (error && 'status' in error) {
+      const errorData = error.data as ErrorResponse;
+      dispatch(setAlert(errorData.message, 'error'));
     }
   }, [error, dispatch]);
 

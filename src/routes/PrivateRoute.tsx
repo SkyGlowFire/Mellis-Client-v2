@@ -1,7 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import { Route, Redirect, useLocation, RouteProps } from 'react-router-dom';
+import { useGetUserQuery, useLazyGetUserQuery } from '~/app/api';
 import { useAppSelector, useAppDispatch } from '~/app/hooks';
-import { getUser } from '~/auth/state/authSlice';
+// import { getUser } from '~/auth/state/authSlice';
 
 type Roles = 'admin' | 'customer' | 'editor';
 
@@ -16,11 +17,13 @@ const PrivateRoute: FC<PrivateRouteProps> = ({
   ...rest
 }) => {
   const location = useLocation();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
+  useGetUserQuery();
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // dispatch(getUser());
+  //   getUser();
+  // }, []);
 
   const { isAuth, loading, user } = useAppSelector((state) => state.auth);
 

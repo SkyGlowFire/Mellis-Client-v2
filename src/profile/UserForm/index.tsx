@@ -5,10 +5,10 @@ import { useForm, FormProvider } from 'react-hook-form';
 import TextInput from '~/common/components/react-hook-form-inputs/TextInput/TextInput';
 import PasswordInput from '~/common/components/react-hook-form-inputs/PasswordInput/PasswordInput';
 import { useEffect } from 'react';
-import { useUpdateUserMutation } from '~/app/api';
+import { useUpdateUserMutation, useLazyGetUserQuery } from '~/app/api';
 import { useAppDispatch, useAppSelector } from '~/app/hooks';
 import { setAlert } from '~/alerts/alertSlice';
-import { getUser } from '~/auth/state/authSlice';
+// import { getUser } from '~/auth/state/authSlice';
 
 interface UserFormData {
   username: string;
@@ -25,6 +25,7 @@ const UserForm = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [updateUser, { error, isSuccess }] = useUpdateUserMutation();
   const dispatch = useAppDispatch();
+  const [getUser] = useLazyGetUserQuery();
 
   useEffect(() => {
     console.log('error: ', error);
@@ -36,7 +37,8 @@ const UserForm = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(getUser());
+      // dispatch(getUser());
+      getUser();
       dispatch(setAlert('User data has been updated', 'success'));
     }
   }, [isSuccess, dispatch]);
