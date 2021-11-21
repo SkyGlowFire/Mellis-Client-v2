@@ -24,12 +24,7 @@ const initialState: AuthState = {
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        clearUser: (state) => {
-            state.isAuth = false
-            state.user = null
-        }
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
         .addMatcher(api.endpoints.signup.matchPending , (state) => {
@@ -99,6 +94,5 @@ export const authSlice = createSlice({
     }
 })
 
-export const {clearUser} = authSlice.actions
 export const getMe = (state: RootState) => state.auth.user
 export default authSlice.reducer;

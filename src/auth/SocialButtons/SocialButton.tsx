@@ -16,14 +16,25 @@ const useStyles = makeStyles({
 interface SocialButtonProps {
   icon: FC<{}>;
   onClick?: () => void;
-  color: string;
+  color?: string;
+  viewBox?: string;
 }
 
-const SocialButton: FC<SocialButtonProps> = ({ icon, onClick, color }) => {
+const SocialButton: FC<SocialButtonProps> = ({
+  icon,
+  onClick,
+  color,
+  viewBox,
+}) => {
   const classes = useStyles();
   return (
     <span onClick={onClick} className={classes.icon}>
-      <SvgIcon sx={{ color }} component={icon} fontSize="large" />
+      <SvgIcon
+        sx={{ color }}
+        component={icon}
+        fontSize="large"
+        viewBox={viewBox}
+      />
     </span>
   );
 };

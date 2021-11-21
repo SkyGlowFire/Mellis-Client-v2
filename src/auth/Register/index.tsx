@@ -50,7 +50,8 @@ const Register = () => {
   }, [error, dispatch]);
 
   const searchParams = new URLSearchParams(useLocation().search);
-  const fromUrl = searchParams.get('from') || '/profile/info';
+  const fromUrl =
+    searchParams.get('from') || searchParams.get('state') || '/profile/info';
 
   const methods = useForm({ resolver: yupResolver(schema) });
   const { handleSubmit } = methods;

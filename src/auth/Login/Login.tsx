@@ -37,7 +37,8 @@ const useStyles = makeStyles<Theme>((theme) => ({
 const Login: FC = () => {
   const classes = useStyles();
   const searchParams = new URLSearchParams(useLocation().search);
-  const fromUrl = searchParams.get('from') || '/profile/info';
+  const fromUrl =
+    searchParams.get('from') || searchParams.get('state') || '/profile/info';
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.auth);
   const [login, { error }] = useLoginLocalMutation();
