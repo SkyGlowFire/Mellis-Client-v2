@@ -11,7 +11,6 @@ import Cart from '~/cart';
 import Favorites from '~/favorites';
 import Checkout from '~/checkout';
 import Profile from '~/profile/Profile';
-// import { getUser } from '~/auth/state/authSlice';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Register from '~/auth/Register';
 import { useFilters } from '~/app/hooks';
@@ -33,7 +32,6 @@ function App() {
   const dispatch = useAppDispatch();
   const firstRender = useRef(true);
   const { push } = useHistory();
-  // const { searchMode } = useAppSelector((state) => state.main);
   const { items: cartItems } = useAppSelector((state) => state.cart);
   const { items: favItems } = useAppSelector((state) => state.favorites);
   useGetUserQuery();
@@ -111,10 +109,6 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-
-  // useEffect(() => {
-  //   dispatch(getUser());
-  // }, [dispatch]);
 
   return (
     <MainLayout>
