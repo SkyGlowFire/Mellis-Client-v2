@@ -63,7 +63,7 @@ const MySelect: FC<MySelectProps> = (props) => {
         value={value}
         onChange={changeHandler}
         name={name}
-        classes={{ root: classes.dense, outlined: classes.dense }}
+        classes={{ root: classes.dense }}
       >
         {options.map((option) => {
           if (typeof option === 'object') {
