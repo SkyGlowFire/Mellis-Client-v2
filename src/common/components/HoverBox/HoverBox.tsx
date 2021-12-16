@@ -163,8 +163,8 @@ const HoverBox: FC<HoverBoxProps> = (props) => {
     );
   } else if (type === 'link') {
     return (
-      <Link to={to || '/'} className={className}>
-        <Typography {...hoverHandlers} className={classes.root} {...rest}>
+      <Link to={to || '/'} className={clsx(className, classes.root)}>
+        <Typography {...hoverHandlers} {...rest}>
           {children}
         </Typography>
       </Link>
