@@ -246,5 +246,6 @@ export const {
     useSignupMutation,
     useGetUserQuery,
     useLogoutMutation,
-    useLazyGetUserQuery
+    useLazyGetUserQuery,
+    useGetRelatedProductsQuery
 } = api

@@ -3,6 +3,7 @@ import { Typography, Grid, Theme } from '@mui/material';
 import ProductCard from '~/common/components/cards/ProductCard';
 import { IProductPopulated } from '~/types/products';
 import { FC } from 'react';
+import { useGetRelatedProductsQuery } from '~/app/api';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   root: {
@@ -34,6 +35,7 @@ interface RelatedProductsProps {
 
 const RelatedProducts: FC<RelatedProductsProps> = ({ product }) => {
   const classes = useStyles();
+  const { data: products } = useGetRelatedProductsQuery(product._id);
   return (
     <div className={classes.root}>
       <Typography
@@ -45,11 +47,12 @@ const RelatedProducts: FC<RelatedProductsProps> = ({ product }) => {
         This might interest you
       </Typography>
       <Grid container spacing={5}>
-        {product.relatedProducts.map((product) => (
-          <Grid item xs={6} sm={4} className={classes.cardItem}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
+        {products &&
+          products.map((product) => (
+            <Grid item xs={6} sm={4} className={classes.cardItem}>
+              <ProductCard product={product} />
+            </Grid>
+          ))}
       </Grid>
     </div>
   );
