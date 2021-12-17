@@ -131,7 +131,7 @@ const ShopByLook = () => {
             Shop by look
           </Typography>
         </Grid>
-        <Grid item>
+        <Grid item sx={{ px: '0.5rem' }}>
           <HoverBox
             color="info"
             type="link"
