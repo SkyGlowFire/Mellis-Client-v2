@@ -95,6 +95,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
         ? `1px solid ${theme.palette.primary.main}`
         : 'none',
     padding: '.2rem .4rem',
+    display: 'inline-block',
   },
 }));
 
