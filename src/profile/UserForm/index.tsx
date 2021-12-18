@@ -28,7 +28,6 @@ const UserForm = () => {
   const [getUser] = useLazyGetUserQuery();
 
   useEffect(() => {
-    console.log('error: ', error);
     const apiError = error as { data?: { message: string; status: number } };
     if (apiError?.data) {
       dispatch(setAlert(apiError.data.message, 'error'));

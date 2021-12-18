@@ -126,7 +126,6 @@ export const mainSlice = createSlice({
             
         })
         .addMatcher(isRejectedAction, (state, action: AnyAction) => {
-            console.log('action ', action)
             const {payload, meta} = action
             const endpoint = meta?.arg?.endpointName
             state.loading = {isLoading: false, endpoint};
