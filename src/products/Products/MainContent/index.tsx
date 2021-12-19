@@ -65,6 +65,7 @@ const MainContent: FC<MainContentProps> = ({ products }) => {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
+    console.log('products', products);
     const newItems: Item[] = [];
     let lookCounter = 0; //look render frequency
     const addedLooks: string[] = []; // avoid look repeat

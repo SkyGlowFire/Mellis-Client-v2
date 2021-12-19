@@ -21,6 +21,7 @@ import ResetPassword from '~/auth/ResetPassword';
 import EmailSent from '~/auth/EmailSent';
 import { setSearchMode, setSearchValue } from '~/common/state/mainSlice';
 import { useGetUserQuery } from '~/app/api';
+import Error404Handler from '~/errors/Error404Handler';
 
 const sessionKeys = {
   CART_ITEMS: 'CART_ITEMS',
@@ -116,15 +117,20 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/auth/login" component={Login} />
         <Route path="/auth/signup" component={Register} />
-        <Route
-          path="/category/:category/:group?/:subGroup?"
-          component={Products}
-        />
+        <Route path="/category/:category/:group?/:subGroup?">
+          <Error404Handler>
+            <Products />
+          </Error404Handler>
+        </Route>
         <Route path="/auth/reset-password/:token" component={ResetPassword} />
         <Route path="/cart" component={Cart} />
         <PrivateRoute path="/checkout" component={Checkout} />
         <Route path="/favorites" component={Favorites} />
-        <Route exact path="/product/:id" component={Product} />
+        <Route exact path="/product/:id">
+          <Error404Handler>
+            <Product />
+          </Error404Handler>
+        </Route>
         <PrivateRoute path="/profile" component={Profile} />
         <Route path="/auth/forgot-password" component={ForgotPassword} />
         <Route path="/auth/email-sent" component={EmailSent} />

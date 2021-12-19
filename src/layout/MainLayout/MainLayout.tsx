@@ -12,7 +12,6 @@ import AddressModal from '~/common/components/modals/AddressModal';
 import CartItemModal from '~/common/components/modals/CartItemModal';
 import Alerts from '~/alerts/Alerts';
 import SearchProducts from '~/products/SearchProducts/SearchProducts';
-import Error404Handler from '~/errors/Error404Handler';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   main: {
@@ -40,7 +39,7 @@ const MainLayout: FC = ({ children }) => {
       <SearchProducts />
       <main className={classes.main}>
         {isLoading && <Spinner />}
-        <Error404Handler>{children}</Error404Handler>
+        {children}
       </main>
       <Footer />
     </>
