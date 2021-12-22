@@ -34,7 +34,6 @@
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
-    "react-snap": "^1.23.0",
     "react-social-login": "^3.4.14",
     "sass": "^1.43.2",
     "sass-loader": "^12.2.0",
@@ -48,8 +47,7 @@
     "start": "set HTTPS=true && craco start",
     "build": "craco build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "postbuild": "react-snap"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
