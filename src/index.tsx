@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { store } from './app/store';
@@ -10,8 +10,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { FiltersProvider } from '~/products/FiltersProvider';
 import ErrorHandler from '~/errors/ErrorHandler';
+import { hydrate, render } from 'react-dom';
 
-ReactDOM.render(
+const rootElement = document.getElementById('root');
+const MainApp = () => (
   <React.StrictMode>
     <Provider store={store}>
       <Router>
@@ -26,6 +28,16 @@ ReactDOM.render(
         </ThemeProvider>
       </Router>
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
+
+// ReactDOM.render(
+//   ,
+//   document.getElementById('root')
+// );
+
+if (rootElement?.hasChildNodes()) {
+  hydrate(<MainApp />, rootElement);
+} else {
+  render(<MainApp />, rootElement);
+}
